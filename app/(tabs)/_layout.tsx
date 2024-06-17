@@ -1,5 +1,4 @@
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Entypo, FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 
 export default function TabLayout() {
