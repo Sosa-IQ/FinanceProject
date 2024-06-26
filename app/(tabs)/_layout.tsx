@@ -16,6 +16,15 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <FontAwesome5 name="wallet" size={24} color={color} />,
         }}
       />
+      <Tabs.Screen
+        name="history"
+        options={{
+          title: 'History',
+          tabBarShowLabel: false,
+          headerShown: false,
+          tabBarIcon: ({color}) => <FontAwesome5 name="history" size={24} color={color} />,
+        }}
+        />
       </Tabs>
   )
 }
