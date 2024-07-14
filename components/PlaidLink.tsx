@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { WebView } from 'react-native-webview'
 import {
   LinkEvent,
@@ -8,17 +8,18 @@ import {
   LinkErrorCode,
   LinkErrorType,
   LinkExitMetadataStatus,
-} from '../types'
+} from '../types/plaid.types'
 import queryString from 'query-string'
+import { createLinkToken } from '@/lib/actions/user.actions'
 interface PlaidLinkProps {
-  linkToken: string
+  // linkToken: string
   onEvent?(event: LinkEvent): any
   onExit?(exit: LinkExit): any
   onSuccess?(success: LinkSuccess): any
 }
 
 export default function PlaidLink({
-  linkToken,
+  // linkToken,
   onEvent,
   onExit,
   onSuccess,
@@ -101,10 +102,52 @@ export default function PlaidLink({
     return true
   }
 
+  const user: User = {
+    $id: "01234",
+    email: "johndoe@example.com",
+    userId: "12345",
+    dwollaCustomerUrl: "https://api-sandbox.dwolla.com/customers/12345",
+    dwollaCustomerId: "12345",
+    firstName: "John",
+    lastName: "Doe",
+    name: "John Doe",
+    address1: "123 Main St",
+    city: "New York",
+    state: "NY",
+    postalCode: "10001",
+    dateOfBirth: "1990-01-01",
+    ssn: "123-45-6789",
+  };
+
+  // const handleCreateLinkToken = async () => {
+  //   try {
+  //     const linkToken = await createLinkToken(user);
+  //     console.log(linkToken);
+  //     return linkToken;
+  //   } catch (error) {
+  //     console.error("Failed to create link token:", error);
+  //   }
+  // };
+
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    const getLinkToken = async () => {
+      const data = await createLinkToken(user);
+
+      setToken(data?.linkToken);
+    }
+    if (!token) {
+      getLinkToken();
+    }
+  }, [user]);
+
+  console.log(token);
+
   return (
     <WebView
       source={{
-        uri: `https://cdn.plaid.com/link/v2/stable/link.html?isWebview=true&token=${linkToken}`,
+        uri: `https://cdn.plaid.com/link/v2/stable/link.html?isWebview=true&token=${token}`,
       }}
       ref={(ref) => (webviewRef = ref)}
       onError={ () => webviewRef.reload() }
