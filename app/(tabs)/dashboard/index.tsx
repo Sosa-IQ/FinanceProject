@@ -1,8 +1,9 @@
 import { View, Text, TextBase, Button } from 'react-native'
 import React from 'react'
 import { createLinkToken } from '@/lib/actions/user.actions';
+import BaseBackground from '@/components/BaseBackground';
 
-const HomeScreen = () => {
+const DashboardScreen = () => {
   // const user: User = {
   //   $id: "01234",
   //   email: "johndoe@example.com",
@@ -25,6 +26,7 @@ const HomeScreen = () => {
   //   console.log(linkToken);
   // };
   return (
+    <BaseBackground>
     <View className='flex-1 items-center justify-center gap-4'>
       <View className='bg-green-500 h-36 w-96 px-6 rounded justify-center'>
         <Text className='text-center'>$(Balance)</Text>
@@ -34,7 +36,8 @@ const HomeScreen = () => {
       </View>
       {/* <Button title="Create Link Token" onPress={handleCreateLinkToken} /> */}
     </View>
+    </BaseBackground>
   )
 }
 
-export default HomeScreen
+export default DashboardScreen

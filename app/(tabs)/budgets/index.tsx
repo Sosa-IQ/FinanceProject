@@ -22,7 +22,7 @@ import { createLinkToken } from '@/lib/actions/user.actions';
 // const linkToken = createLinkToken(user);
 // console.log(String(linkToken));
 
-const HistoryScreen = () => {
+const BudgetScreen = () => {
   return (
     <PlaidLink
       // linkToken={String(linkToken)}
@@ -33,4 +33,4 @@ const HistoryScreen = () => {
   )
 }
 
-export default HistoryScreen
+export default BudgetScreen

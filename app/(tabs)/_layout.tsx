@@ -1,28 +1,69 @@
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
+import { Image } from 'react-native';
 
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: 'black',
+        tabBarInactiveTintColor: 'gray',
+        tabBarStyle: { backgroundColor: '#DAF1DE'}
       }}>
       <Tabs.Screen
-        name="home"
+        name="dashboard"
         options={{
-          title: 'Home',
-          tabBarShowLabel: false,
+          title: 'Dashboard',
+          tabBarShowLabel: true,
           headerShown: false,
-          tabBarIcon: ({ color }) => <FontAwesome5 name="wallet" size={24} color={color} />,
+          tabBarIcon: ({color}) => (
+            <Image
+              source={require('../../assets/navbar/dashboard.png')}
+              style={{width: 24, height: 24, tintColor: color}}
+            />
+          ),
         }}
       />
       <Tabs.Screen
-        name="history"
+        name="budgets"
         options={{
-          title: 'History',
-          tabBarShowLabel: false,
+          title: 'Budgets',
+          tabBarShowLabel: true,
           headerShown: false,
-          tabBarIcon: ({color}) => <FontAwesome5 name="history" size={24} color={color} />,
+          tabBarIcon: ({color}) => (
+            <Image
+              source={require('../../assets/navbar/budget.png')}
+              style={{width: 24, height: 24, tintColor: color}}
+            />
+          ),
+        }}
+        />
+      <Tabs.Screen
+        name="transactions"
+        options={{
+          title: 'Transactions',
+          tabBarShowLabel: true,
+          headerShown: false,
+          tabBarIcon: ({color}) => (
+            <Image
+              source={require('../../assets/navbar/transactions.png')}
+              style={{width: 24, height: 24, tintColor: color}}
+            />
+          ),
+        }}
+        />
+        <Tabs.Screen
+        name="settings"
+        options={{
+          title: 'Settings',
+          tabBarShowLabel: true,
+          headerShown: false,
+          tabBarIcon: ({color}) => (
+            <Image
+              source={require('../../assets/navbar/settings.png')}
+              style={{width: 24, height: 24, tintColor: color}}
+            />
+          ),
         }}
         />
       </Tabs>
