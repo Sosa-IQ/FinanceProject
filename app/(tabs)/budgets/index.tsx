@@ -24,12 +24,16 @@ import { createLinkToken } from '@/lib/actions/user.actions';
 
 const BudgetScreen = () => {
   return (
-    <PlaidLink
+    <View className='w-screen h-screen'>
+      <PlaidLink
       // linkToken={String(linkToken)}
       onEvent={(event) => console.log(event)}
       onExit={(exit) => console.log(exit)}
       onSuccess={(success) => console.log(success)}
-    />
+      />
+    </View>
+
+
   )
 }
 
