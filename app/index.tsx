@@ -30,14 +30,14 @@ const InitScreen = () => {
             </View>
 
             <View className='flex-1 justify-center items-center relative mt-24'>
-              <Text className='text-white font-serif font-semibold text-5xl z-20'>
+              <Text className='text-white text-5xl z-20 font-bsregular'>
                 Are You Ready To
               </Text>
-              <Text className='font-serif font-semibold text-6xl'>
-                <Text className='text-greenSecondary'>
+              <Text className='text-6xl'>
+                <Text className='text-greenSecondary font-bsregular'>
                   BudgIt
                 </Text>
-                <Text className='text-white'>
+                <Text className='text-white font-bsregular'>
                   ?
                 </Text>
               </Text>
@@ -51,7 +51,8 @@ const InitScreen = () => {
             <AuthButton
                 title='Continue with Email'
                 handlePress={() => router.push('/(tabs)/dashboard') }
-                containerStyles='w-[350px] shadow-lg'
+                containerStyles='w-[325px] shadow-lg'
+                textStyles='font-bsregular'
               />
             </View>
           </ScrollView>

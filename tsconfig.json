@@ -13,5 +13,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-, "components/PlaidLink.tsx"  ]
+, "components/PlaidLink.tsx", "constants/icons.ts", "constants/index.ts"  ]
 }

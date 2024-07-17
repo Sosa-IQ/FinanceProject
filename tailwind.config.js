@@ -10,6 +10,9 @@ module.exports = {
         greenBase: '#163832', // for background
         greenSecondary: '#DAF1DE', // for other components
       },
+      fontFamily: {
+        bsregular: ['BreeSerif-Regular', 'serif'],
+      },
     },
   },
   plugins: [],
