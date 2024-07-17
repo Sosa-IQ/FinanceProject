@@ -1,5 +1,4 @@
-// import { StatusBar } from 'expo-status-bar'
-import { StatusBar } from 'react-native'
+import { StatusBar } from 'expo-status-bar'
 import { ScrollView, View, Text, Image } from 'react-native'
 import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -8,10 +7,6 @@ import AuthButton from '@/components/AuthButton'
 import { router } from 'expo-router'
 
 const InitScreen = () => {
-  useEffect(() => {
-    StatusBar.setBarStyle('light-content');
-  }, []);
-
   return (
     <LinearGradient 
     colors={['#4EB99E', '#235347']}
@@ -50,14 +45,14 @@ const InitScreen = () => {
             <View className='items-center mb-28'>
             <AuthButton
                 title='Continue with Email'
-                handlePress={() => router.push('/(tabs)/dashboard') }
+                handlePress={() => router.push('/(auth)/sign-up') }
                 containerStyles='w-[325px] shadow-lg'
                 textStyles='font-bsregular'
               />
             </View>
           </ScrollView>
           <StatusBar
-            barStyle='light-content'
+            style='light'
           />
       </SafeAreaView>
     </LinearGradient>
