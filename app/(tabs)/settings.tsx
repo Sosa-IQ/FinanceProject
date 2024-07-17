@@ -3,14 +3,14 @@ import React from 'react'
 import {LinearGradient} from 'expo-linear-gradient';
 import BaseBackground from '@/components/BaseBackground';
 
-const TransactionsScreen = () => {
+const SettingsScreen = () => {
   return (
     <BaseBackground>
-    <View>
-      
-    </View>
+      <View>
+        <Text>Settings</Text>
+      </View>
     </BaseBackground>
   )
 }
 
-export default TransactionsScreen
+export default SettingsScreen

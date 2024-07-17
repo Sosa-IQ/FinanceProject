@@ -2,6 +2,7 @@ import {View, Text} from 'react-native'
 import React from 'react'
 import PlaidLink from '@/components/PlaidLink'
 import { createLinkToken } from '@/lib/actions/user.actions';
+import BaseBackground from '@/components/BaseBackground';
 
 // const user: User = {
 //   $id: "01234",
@@ -24,16 +25,11 @@ import { createLinkToken } from '@/lib/actions/user.actions';
 
 const BudgetScreen = () => {
   return (
-    <View className='w-screen h-screen'>
-      <PlaidLink
-      // linkToken={String(linkToken)}
-      onEvent={(event) => console.log(event)}
-      onExit={(exit) => console.log(exit)}
-      onSuccess={(success) => console.log(success)}
-      />
-    </View>
-
-
+    <BaseBackground>
+      <View>
+        <Text>Budgets</Text>
+      </View>
+    </BaseBackground>
   )
 }
 
