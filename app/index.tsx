@@ -1,12 +1,17 @@
-import { StatusBar } from 'expo-status-bar'
+// import { StatusBar } from 'expo-status-bar'
+import { StatusBar } from 'react-native'
 import { ScrollView, View, Text, Image } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
 import AuthButton from '@/components/AuthButton'
 import { router } from 'expo-router'
 
 const InitScreen = () => {
+  useEffect(() => {
+    StatusBar.setBarStyle('light-content');
+  }, []);
+
   return (
     <LinearGradient 
     colors={['#4EB99E', '#235347']}
@@ -45,13 +50,13 @@ const InitScreen = () => {
             <View className='items-center mb-28'>
             <AuthButton
                 title='Continue with Email'
-                handlePress={() => { router.push('/(tabs)/dashboard') } }
+                handlePress={() => router.push('/(tabs)/dashboard') }
                 containerStyles='w-[350px] shadow-lg'
               />
             </View>
           </ScrollView>
           <StatusBar
-            style='light'
+            barStyle='light-content'
           />
       </SafeAreaView>
     </LinearGradient>
