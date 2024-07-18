@@ -8,7 +8,7 @@ interface FormFieldProps {
   placeholder: string;
   handleChangeText: (e: string) => void;
   otherStyles?: string;
-  props: any;
+  props?: any;
 }
 
 const FormField = ({ title, value, placeholder, handleChangeText, otherStyles, ...props }: FormFieldProps) => {
@@ -22,7 +22,7 @@ const FormField = ({ title, value, placeholder, handleChangeText, otherStyles, .
           className='w-full flex-1 text-white font-bsregular text-base'
           value={value}
           placeholder={placeholder}
-          placeholderTextColor="#235347"
+          placeholderTextColor="#919191"
           onChangeText={handleChangeText}
           secureTextEntry={(title === 'Password' && !showPassword) || (title === 'Confirm Password' && !showPassword)}
         />

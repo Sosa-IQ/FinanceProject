@@ -7,7 +7,7 @@ import FormField from '@/components/FormField'
 import AuthButton from '@/components/AuthButton'
 import { Link, router } from 'expo-router'
 
-const SignUp = () => {
+const LogIn = () => {
   const [form, setForm] = React.useState({
     firstName: '',
     lastName: '',
@@ -42,23 +42,9 @@ const SignUp = () => {
             />
             
             <Text className='text-white text-3xl font-bsregular mt-2'>
-              Sign Up
+              Log In
             </Text>
 
-            <FormField
-              title="First Name"
-              value={form.firstName}
-              handleChangeText={(e) => setForm({ ...form, firstName: e })}
-              otherStyles='mt-3'
-              placeholder={'First Name'}
-            />
-            <FormField
-              title="Last Name"
-              value={form.lastName}
-              handleChangeText={(e) => setForm({ ...form, lastName: e })}
-              otherStyles='mt-3'
-              placeholder={'Last Name'}
-            />
             <FormField
               title="Email"
               value={form.email}
@@ -73,16 +59,9 @@ const SignUp = () => {
               otherStyles='mt-3'
               placeholder={'Password'}
             />
-            <FormField
-              title="Confirm Password"
-              value={form.confirmPassword}
-              handleChangeText={(e) => setForm({ ...form, confirmPassword: e })}
-              otherStyles='mt-3'
-              placeholder={'Confirm Password'}
-            />
             
             <AuthButton 
-              title={'Sign Up'} 
+              title={'Log In'} 
               handlePress={submit}
               containerStyles='w-full mt-6 shadow-lg'
               textStyles='text-xl font-bsregular'
@@ -91,9 +70,9 @@ const SignUp = () => {
 
             <View className='justify-center pt-3 flex-row gap-2'>
               <Text className='text-gray-200 font-bsregular text-base'>
-                Already have an account?
+                Don't have an account?
               </Text>
-              <Link href="/log-in" className='font-bsregular text-base text-greenSecondary underline'>Log In</Link>
+              <Link href="/sign-up" className='font-bsregular text-base text-greenSecondary underline'>Sign Up</Link>
             </View>
           </View>
         </ScrollView>
@@ -103,4 +82,4 @@ const SignUp = () => {
   )
 }
 
-export default SignUp
+export default LogIn
