@@ -6,9 +6,9 @@ import BaseBackground from '@/components/BaseBackground';
 const TransactionsScreen = () => {
   return (
     <BaseBackground>
-    <View>
-      
-    </View>
+      <View>
+        <Text>Transactions</Text>
+      </View>
     </BaseBackground>
   )
 }

@@ -1,8 +1,9 @@
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import { Image } from 'react-native';
+import { icons } from '../../constants';
 
-export default function TabLayout() {
+export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
@@ -18,7 +19,7 @@ export default function TabLayout() {
           headerShown: false,
           tabBarIcon: ({color}) => (
             <Image
-              source={require('../../assets/navbar/dashboard.png')}
+              source={icons.dashboard}
               style={{width: 24, height: 24, tintColor: color}}
             />
           ),
@@ -32,7 +33,7 @@ export default function TabLayout() {
           headerShown: false,
           tabBarIcon: ({color}) => (
             <Image
-              source={require('../../assets/navbar/budget.png')}
+              source={icons.budget}
               style={{width: 24, height: 24, tintColor: color}}
             />
           ),
@@ -46,7 +47,7 @@ export default function TabLayout() {
           headerShown: false,
           tabBarIcon: ({color}) => (
             <Image
-              source={require('../../assets/navbar/transactions.png')}
+              source={icons.transactions}
               style={{width: 24, height: 24, tintColor: color}}
             />
           ),
@@ -60,7 +61,7 @@ export default function TabLayout() {
           headerShown: false,
           tabBarIcon: ({color}) => (
             <Image
-              source={require('../../assets/navbar/settings.png')}
+              source={icons.settings}
               style={{width: 24, height: 24, tintColor: color}}
             />
           ),
