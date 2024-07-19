@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
 import AuthButton from '@/components/AuthButton'
 import { router } from 'expo-router'
+import 'react-native-url-polyfill/auto'
 
 const InitScreen = () => {
   return (

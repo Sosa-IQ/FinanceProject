@@ -6,6 +6,7 @@ import { images } from '@/constants'
 import FormField from '@/components/FormField'
 import AuthButton from '@/components/AuthButton'
 import { Link, router } from 'expo-router'
+import { createUser } from '@/lib/appwrite'
 
 const SignUp = () => {
   const [form, setForm] = React.useState({
@@ -19,7 +20,7 @@ const SignUp = () => {
   const [isSubmitting, setIsSubmitting] = React.useState(false)
 
   const submit = () => {
-    router.replace('/dashboard')
+    createUser();
   }
 
   return (
