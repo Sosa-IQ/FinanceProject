@@ -1,4 +1,4 @@
-import { Account, Client, ID } from 'react-native-appwrite';
+import { Account, Client, Databases, ID, Storage } from 'react-native-appwrite';
 
 export const config = {
   endpoint: process.env.EXPO_PUBLIC_APPWRITE_ENDPOINT || '',
@@ -18,13 +18,52 @@ client
 ;
 
 const account = new Account(client);
+const storage = new Storage(client);
+const databases = new Databases(client);
 
-// Register User
-export const createUser = () => {
-  account.create(ID.unique(), 'me@example.com', 'password', 'Jane Doe')
-    .then(function (response) {
-        console.log(response);
-    }, function (error) {
-        console.log(error);
-    });
+// Register user (Sign Up)
+export async function createUser(firstName: string, lastName: string, email: string, password: string) {
+  try {
+    const newUserAccount = await account.create(
+      ID.unique(),
+      email,
+      password,
+      `${firstName} ${lastName}`
+    );
+
+    if (!newUserAccount) throw Error;
+
+    await signIn(email, password);
+
+    // TODO: Add dwolla details to user account
+
+    const newUser = await databases.createDocument(
+      config.databaseId,
+      config.userCollectionId,
+      ID.unique(),
+      {
+        user_id: newUserAccount.$id,
+        email: email,
+        first_name: firstName,
+        last_name: lastName,
+        dwollaCustomerUrl: '',
+        dwollaCustomerId: '',
+      }
+    );
+
+    return newUser;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+}
+
+// Sign In
+export async function signIn(email: string, password: string) {
+  try {
+    const session = await account.createEmailPasswordSession(email, password);
+
+    return session;
+  } catch (error) {
+    throw new Error(error as string);
+  }
 }

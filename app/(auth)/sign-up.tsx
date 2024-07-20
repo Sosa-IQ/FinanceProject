@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, KeyboardAvoidingView, Platform } from 'react-native'
+import { View, Text, ScrollView, Image, KeyboardAvoidingView, Platform, Alert } from 'react-native'
 import React from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -19,9 +19,24 @@ const SignUp = () => {
 
   const [isSubmitting, setIsSubmitting] = React.useState(false)
 
-  const submit = () => {
-    createUser();
-  }
+  const submit = async () => {
+    if (form.firstName === "" || form.lastName === "" || form.email === "" || form.password === "" || form.confirmPassword === "") {
+      Alert.alert("Error", "Please fill in all fields");
+    }
+
+    setIsSubmitting(true);
+    try {
+      const result = await createUser(form.firstName, form.lastName, form.email, form.password);
+      // setUser(result);
+      // setIsLogged(true);
+
+      router.replace("/dashboard");
+    } catch (error) {
+      Alert.alert("Error", (error as Error).message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <LinearGradient 
