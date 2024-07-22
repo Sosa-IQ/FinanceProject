@@ -22,6 +22,12 @@ const SignUp = () => {
   const submit = async () => {
     if (form.firstName === "" || form.lastName === "" || form.email === "" || form.password === "" || form.confirmPassword === "") {
       Alert.alert("Error", "Please fill in all fields");
+      return;
+    }
+
+    if (form.password !== form.confirmPassword) {
+      Alert.alert("Error", "Passwords do not match");
+      return;
     }
 
     setIsSubmitting(true);
