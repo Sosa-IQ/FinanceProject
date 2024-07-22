@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, KeyboardAvoidingView, Platform } from 'react-native'
+import { View, Text, ScrollView, Image, KeyboardAvoidingView, Platform, Alert } from 'react-native'
 import React from 'react'
 import { LinearGradient } from 'expo-linear-gradient'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -6,6 +6,8 @@ import { images } from '@/constants'
 import FormField from '@/components/FormField'
 import AuthButton from '@/components/AuthButton'
 import { Link, router } from 'expo-router'
+import { createUser } from '@/lib/appwrite'
+import { useGlobalContext } from '@/context/GlobalProvider'
 
 const SignUp = () => {
   const [form, setForm] = React.useState({
@@ -16,11 +18,33 @@ const SignUp = () => {
     confirmPassword: '',
   })
 
-  const [isSubmitting, setIsSubmitting] = React.useState(false)
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const { setUser, setIsLogged } = useGlobalContext();
 
-  const submit = () => {
-    router.replace('/dashboard')
-  }
+  const submit = async () => {
+    if (form.firstName === "" || form.lastName === "" || form.email === "" || form.password === "" || form.confirmPassword === "") {
+      Alert.alert("Error", "Please fill in all fields");
+      return;
+    }
+
+    if (form.password !== form.confirmPassword) {
+      Alert.alert("Error", "Passwords do not match");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const result = await createUser(form.firstName, form.lastName, form.email, form.password);
+      setUser(result);
+      setIsLogged(true);
+
+      router.replace("/dashboard");
+    } catch (error) {
+      Alert.alert("Error", (error as Error).message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <LinearGradient 

@@ -4,9 +4,15 @@ import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
 import AuthButton from '@/components/AuthButton'
-import { router } from 'expo-router'
+import { Redirect, router } from 'expo-router'
+import 'react-native-url-polyfill/auto'
+import { useGlobalContext } from '@/context/GlobalProvider'
 
 const InitScreen = () => {
+  const {loading, isLogged} = useGlobalContext();
+
+  if(!loading && isLogged) return <Redirect href='/dashboard' />
+
   return (
     <LinearGradient 
     colors={['#4EB99E', '#235347']}
