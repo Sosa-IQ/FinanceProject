@@ -1,4 +1,4 @@
-import { Account, Client, Databases, ID, Storage } from 'react-native-appwrite';
+import { Account, Client, Databases, ID, Query, Storage } from 'react-native-appwrite';
 
 export const config = {
   endpoint: process.env.EXPO_PUBLIC_APPWRITE_ENDPOINT || '',
@@ -35,8 +35,6 @@ export async function createUser(firstName: string, lastName: string, email: str
 
     await signIn(email, password);
 
-    // TODO: Add dwolla details to user account
-
     const newUser = await databases.createDocument(
       config.databaseId,
       config.userCollectionId,
@@ -46,6 +44,7 @@ export async function createUser(firstName: string, lastName: string, email: str
         email: email,
         first_name: firstName,
         last_name: lastName,
+        // TODO: Add dwolla details to user account
         dwollaCustomerUrl: '',
         dwollaCustomerId: '',
       }
@@ -53,6 +52,7 @@ export async function createUser(firstName: string, lastName: string, email: str
 
     return newUser;
   } catch (error) {
+    console.log(error);
     throw new Error(error as string);
   }
 }
@@ -64,6 +64,28 @@ export async function signIn(email: string, password: string) {
 
     return session;
   } catch (error) {
+    console.log(error);
     throw new Error(error as string);
+  }
+}
+
+export const getCurrentUser = async () => {
+  try {
+    const currentAccount = await account.get();
+
+    if(!currentAccount) throw Error;
+
+    const currentUser = await databases.listDocuments(
+      config.databaseId,
+      config.userCollectionId,
+      [Query.equal("user_id", currentAccount.$id)]
+    );
+
+    if (!currentUser) throw Error;
+
+    return currentUser.documents[0];
+  } catch (error) {
+    console.log(error);
+    return null;
   }
 }
