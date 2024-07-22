@@ -69,9 +69,21 @@ export async function signIn(email: string, password: string) {
   }
 }
 
-export const getCurrentUser = async () => {
+// Get Account
+export async function getAccount() {
   try {
     const currentAccount = await account.get();
+
+    return currentAccount;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+}
+
+// Get Current User
+export const getCurrentUser = async () => {
+  try {
+    const currentAccount = await getAccount();
 
     if(!currentAccount) throw Error;
 
@@ -87,5 +99,17 @@ export const getCurrentUser = async () => {
   } catch (error) {
     console.log(error);
     return null;
+  }
+}
+
+// Sign Out
+export async function signOut() {
+  try {
+    const session = await account.deleteSession("current");
+
+    return session;
+  } catch (error) {
+    console.log(error);
+    throw new Error(error as string);
   }
 }
