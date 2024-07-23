@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { WebView } from 'react-native-webview'
 import {
   LinkEvent,
@@ -10,9 +10,11 @@ import {
   LinkExitMetadataStatus,
 } from '../types/plaid.types'
 import queryString from 'query-string'
-import { createLinkToken } from '@/lib/actions/user.actions'
+import { createLinkToken, exchangePublicToken } from '@/lib/actions/user.actions'
+
 interface PlaidLinkProps {
   // linkToken: string
+  user: User
   onEvent?(event: LinkEvent): any
   onExit?(exit: LinkExit): any
   onSuccess?(success: LinkSuccess): any
@@ -20,13 +22,35 @@ interface PlaidLinkProps {
 
 export default function PlaidLink({
   // linkToken,
+  user,
   onEvent,
   onExit,
   onSuccess,
 }: PlaidLinkProps) {
   let webviewRef: any = useRef()
 
-  const handleNavigationStateChange = (event: any) => {
+  const handleTokenExchange = useCallback(async (publicToken: string, metadata: any) => {
+    try {
+      const result = await exchangePublicToken({ publicToken, user })
+      if (result && result.publicTokenExchange === "complete") {
+        console.log("Public token exchange completed successfully")
+      } else {
+        console.error("Failed to exchange public token")
+      }
+  
+      // Call the onSuccess callback
+      if (onSuccess) {
+        onSuccess({
+          publicToken,
+          metadata,
+        })
+      }
+    } catch (error) {
+      console.error("Error exchanging public token:", error)
+    }
+  }, [user, onSuccess])
+
+  const handleNavigationStateChange = useCallback((event: any) => {
     if (event.url.startsWith('plaidlink://')) {
       console.log(event.url)
       const eventParams = queryString.parse(event.url.replace(/.*\?/, ''))
@@ -85,39 +109,37 @@ export default function PlaidLink({
       } else if (event.url.startsWith('plaidlink://connected') && onSuccess) {
         const publicToken = eventParams.public_token as string
         const accounts = JSON.parse(eventParams.accounts as string)
-        onSuccess({
-          publicToken,
-          metadata: {
-            institution: {
-              id: institutionId,
-              name: institutionName,
-            },
-            accounts,
-            linkSessionId,
+        const metadata = {
+          institution: {
+            id: institutionId,
+            name: institutionName,
           },
-        })
+          accounts,
+          linkSessionId,
+        }
+        handleTokenExchange(publicToken, metadata)
       }
       return false
     }
     return true
-  }
+  }, [onEvent, onExit, handleTokenExchange])
 
-  const user: User = {
-    $id: "01234",
-    email: "johndoe@example.com",
-    userId: "12345",
-    dwollaCustomerUrl: "https://api-sandbox.dwolla.com/customers/12345",
-    dwollaCustomerId: "12345",
-    firstName: "John",
-    lastName: "Doe",
-    name: "John Doe",
-    address1: "123 Main St",
-    city: "New York",
-    state: "NY",
-    postalCode: "10001",
-    dateOfBirth: "1990-01-01",
-    ssn: "123-45-6789",
-  };
+  // const user: User = {
+  //   $id: "01234",
+  //   email: "johndoe@example.com",
+  //   userId: "12345",
+  //   dwollaCustomerUrl: "https://api-sandbox.dwolla.com/customers/12345",
+  //   dwollaCustomerId: "12345",
+  //   firstName: "John",
+  //   lastName: "Doe",
+  //   name: "John Doe",
+  //   address1: "123 Main St",
+  //   city: "New York",
+  //   state: "NY",
+  //   postalCode: "10001",
+  //   dateOfBirth: "1990-01-01",
+  //   ssn: "123-45-6789",
+  // };
 
   // const handleCreateLinkToken = async () => {
   //   try {

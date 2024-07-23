@@ -3,29 +3,15 @@ import React, { useState } from 'react'
 import { createLinkToken } from '@/lib/actions/user.actions';
 import BaseBackground from '@/components/BaseBackground';
 import PlaidLink from '@/components/PlaidLink';
+import { useGlobalContext } from '@/context/GlobalProvider';
 
 const DashboardScreen = () => {
-  const user: User = {
-    $id: "01234",
-    email: "johndoe@example.com",
-    userId: "12345",
-    dwollaCustomerUrl: "https://api-sandbox.dwolla.com/customers/12345",
-    dwollaCustomerId: "12345",
-    firstName: "John",
-    lastName: "Doe",
-    name: "John Doe",
-    address1: "123 Main St",
-    city: "New York",
-    state: "NY",
-    postalCode: "10001",
-    dateOfBirth: "1990-01-01",
-    ssn: "123-45-6789",
-  };
+  const { user } = useGlobalContext();
 
-  const handleCreateLinkToken = () => {
-    const linkToken = createLinkToken(user);
-    console.log(linkToken);
-  };
+  // const handleCreateLinkToken = () => {
+  //   const linkToken = createLinkToken(user);
+  //   console.log(linkToken);
+  // };
 
   const [modalVisible, setModalVisible] = useState(false);
   
@@ -54,13 +40,15 @@ const DashboardScreen = () => {
       >
         <View className='flex-1 mt-24'>
           <PlaidLink
-          // linkToken={String(linkToken)}
+          user={user}
           onEvent={(event) => console.log(event)}
           onExit={(exit) => {
             console.log(exit);
             toggleModal();
           }}
-          onSuccess={(success) => console.log(success)}
+          onSuccess={(success) => 
+            console.log(success)
+          }
           />
         </View>
       </Modal>
