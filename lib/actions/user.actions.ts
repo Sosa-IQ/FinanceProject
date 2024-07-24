@@ -37,6 +37,8 @@ export const exchangePublicToken = async ({
       public_token: publicToken,
     });
 
+    // console.log("RESPONSE: ", response.data);
+
     const accessToken = response.data.access_token;
     const itemId = response.data.item_id;
     
@@ -45,17 +47,19 @@ export const exchangePublicToken = async ({
       access_token: accessToken,
     });
 
+    // console.log("ACCOUNTS: ", accountsResponse.data);
+
     const accountData = accountsResponse.data.accounts[0];
 
     // Create a processor token for Dwolla using the access token and account ID
-    const request: ProcessorTokenCreateRequest = {
-      access_token: accessToken,
-      account_id: accountData.account_id,
-      processor: "dwolla" as ProcessorTokenCreateRequestProcessorEnum,
-    };
+    // const request: ProcessorTokenCreateRequest = {
+    //   access_token: accessToken,
+    //   account_id: accountData.account_id,
+    //   processor: "dwolla" as ProcessorTokenCreateRequestProcessorEnum,
+    // };
 
-    const processorTokenResponse = await plaidClient.processorTokenCreate(request);
-    const processorToken = processorTokenResponse.data.processor_token;
+    // const processorTokenResponse = await plaidClient.processorTokenCreate(request);
+    // const processorToken = processorTokenResponse.data.processor_token;
 
     // TODO: Implement stripe and uncomment the following code (replacing dwolla with stripe)
 

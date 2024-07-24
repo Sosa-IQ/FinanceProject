@@ -52,7 +52,7 @@ export default function PlaidLink({
 
   const handleNavigationStateChange = useCallback((event: any) => {
     if (event.url.startsWith('plaidlink://')) {
-      console.log(event.url)
+      // console.log("EVENT: ", event.url)
       const eventParams = queryString.parse(event.url.replace(/.*\?/, ''))
 
       const linkSessionId = eventParams.link_session_id as string
@@ -164,7 +164,7 @@ export default function PlaidLink({
     }
   }, [user]);
 
-  console.log(token);
+  // console.log("TOKEN: ", token);
 
   return (
     <WebView
