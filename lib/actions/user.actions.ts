@@ -31,6 +31,8 @@ export const exchangePublicToken = async ({
   publicToken,
   user,
 }: exchangePublicTokenProps) => {
+  let newBankAccount;
+
   try {
     // Exchange public token for access token and item ID
     const response = await plaidClient.itemPublicTokenExchange({
@@ -77,7 +79,7 @@ export const exchangePublicToken = async ({
 
     // Create a bank account using the user ID, item ID, account ID, access token, funding source URL, and shareableId ID
 
-    await createBankAccount({
+    newBankAccount = await createBankAccount({
       user_id: user.$id,
       bankId: itemId,
       accountId: accountData.account_id,
@@ -85,6 +87,8 @@ export const exchangePublicToken = async ({
       fundingSourceUrl: '', // TODO: Replace with fundingSourceUrl
       shareableId: encryptId(accountData.account_id),
     });
+
+    if (!newBankAccount) throw new Error("Failed to create bank account");
 
     // Return a success message
     return parseStringify({
