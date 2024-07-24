@@ -8,11 +8,6 @@ import { useGlobalContext } from '@/context/GlobalProvider';
 const DashboardScreen = () => {
   const { user } = useGlobalContext();
 
-  // const handleCreateLinkToken = () => {
-  //   const linkToken = createLinkToken(user);
-  //   console.log(linkToken);
-  // };
-
   const [modalVisible, setModalVisible] = useState(false);
   
   const toggleModal = () => {
@@ -46,9 +41,10 @@ const DashboardScreen = () => {
             console.log(exit);
             toggleModal();
           }}
-          onSuccess={(success) => 
-            console.log(success)
-          }
+          onSuccess={(success) => {
+            console.log(success);
+            toggleModal();
+          }}
           />
         </View>
       </Modal>
