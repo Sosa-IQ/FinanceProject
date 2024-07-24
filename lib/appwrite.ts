@@ -1,11 +1,11 @@
 import { Account, Client, Databases, ID, Query, Storage } from 'react-native-appwrite';
 
 export const config = {
-  endpoint: process.env.EXPO_PUBLIC_APPWRITE_ENDPOINT || '',
+  endpoint: process.env.EXPO_PUBLIC_APPWRITE_ENDPOINT!,
   platform: 'com.ziro.budgit',
-  projectId: process.env.EXPO_PUBLIC_APPWRITE_PROJECT || '',
-  databaseId: process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID || '',
-  userCollectionId: process.env.EXPO_PUBLIC_APPWRITE_USER_COLLECTION_ID || ''
+  projectId: process.env.EXPO_PUBLIC_APPWRITE_PROJECT!,
+  databaseId: process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!,
+  userCollectionId: process.env.EXPO_PUBLIC_APPWRITE_USER_COLLECTION_ID!
 }
 
 // Init your React Native SDK
