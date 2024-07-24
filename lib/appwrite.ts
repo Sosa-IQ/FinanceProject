@@ -1,11 +1,13 @@
 import { Account, Client, Databases, ID, Query, Storage } from 'react-native-appwrite';
+import { parseStringify } from './utils';
 
 export const config = {
   endpoint: process.env.EXPO_PUBLIC_APPWRITE_ENDPOINT!,
   platform: 'com.ziro.budgit',
   projectId: process.env.EXPO_PUBLIC_APPWRITE_PROJECT!,
   databaseId: process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!,
-  userCollectionId: process.env.EXPO_PUBLIC_APPWRITE_USER_COLLECTION_ID!
+  userCollectionId: process.env.EXPO_PUBLIC_APPWRITE_USER_COLLECTION_ID!,
+  bankCollectionId: process.env.EXPO_PUBLIC_APPWRITE_BANK_COLLECTION_ID!
 }
 
 // Init your React Native SDK
@@ -23,15 +25,19 @@ const databases = new Databases(client);
 
 // Register user (Sign Up)
 export async function createUser(firstName: string, lastName: string, email: string, password: string) {
+  let newUserAccount;
+
   try {
-    const newUserAccount = await account.create(
+    newUserAccount = await account.create(
       ID.unique(),
       email,
       password,
       `${firstName} ${lastName}`
     );
 
-    if (!newUserAccount) throw Error;
+    if (!newUserAccount) throw new Error('Error creating new user account');
+
+    // TODO: Implement Stripe, creating a stripe customer here and add to database
 
     await signIn(email, password);
 
@@ -44,13 +50,10 @@ export async function createUser(firstName: string, lastName: string, email: str
         email: email,
         first_name: firstName,
         last_name: lastName,
-        // TODO: Add dwolla details to user account
-        dwollaCustomerUrl: '',
-        dwollaCustomerId: '',
       }
     );
 
-    return newUser;
+    return parseStringify(newUser);
   } catch (error) {
     console.log(error);
     throw new Error(error as string);
@@ -111,5 +114,36 @@ export async function signOut() {
   } catch (error) {
     console.log(error);
     throw new Error(error as string);
+  }
+}
+
+// Create Bank Account
+export const createBankAccount = async ({
+  user_id,
+  bankId,
+  accountId,
+  accessToken,
+  fundingSourceUrl,
+  shareableId,
+}: createBankAccountProps) => {
+  try {
+
+    const bankAccount = await databases.createDocument(
+      config.databaseId,
+      config.bankCollectionId,
+      ID.unique(),
+      {
+        user_id,
+        bankId,
+        accountId,
+        accessToken,
+        fundingSourceUrl,
+        shareableId,
+      }
+    )
+
+    return parseStringify(bankAccount);
+  } catch (error) {
+    console.log(error);
   }
 }

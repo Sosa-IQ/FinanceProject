@@ -12,3 +12,12 @@ declare interface exchangePublicTokenProps {
   publicToken: string;
   user: User;
 }
+
+declare interface createBankAccountProps {
+  accessToken: string;
+  user_id: string;
+  accountId: string;
+  bankId: string;
+  fundingSourceUrl: string;
+  shareableId: string;
+}

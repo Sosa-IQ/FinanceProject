@@ -1,6 +1,7 @@
 import { CountryCode, ProcessorTokenCreateRequest, ProcessorTokenCreateRequestProcessorEnum, Products } from "plaid";
 import { plaidClient } from "@/lib/plaid";
-import { parseStringify } from "../utils";
+import { encryptId, parseStringify } from "../utils";
+import { createBankAccount } from "../appwrite";
 
 export const createLinkToken = async (user: User) => {
   try {
@@ -56,8 +57,8 @@ export const exchangePublicToken = async ({
     const processorTokenResponse = await plaidClient.processorTokenCreate(request);
     const processorToken = processorTokenResponse.data.processor_token;
 
-    // TODO: Implement dwolla and uncomment the following code
-    
+    // TODO: Implement stripe and uncomment the following code (replacing dwolla with stripe)
+
      // Create a funding source URL for the account using the Dwolla customer ID, processor token, and bank name
     
      //  const fundingSourceUrl = await addFundingSource({
@@ -72,18 +73,14 @@ export const exchangePublicToken = async ({
 
     // Create a bank account using the user ID, item ID, account ID, access token, funding source URL, and shareableId ID
 
-    // await createBankAccount({
-    //   userId: user.$id,
-    //   bankId: itemId,
-    //   accountId: accountData.account_id,
-    //   accessToken,
-    //   fundingSourceUrl,
-    //   shareableId: encryptId(accountData.account_id),
-    // });
-
-    // Revalidate the path to reflect the changes
-
-    // revalidatePath("/");
+    await createBankAccount({
+      user_id: user.$id,
+      bankId: itemId,
+      accountId: accountData.account_id,
+      accessToken,
+      fundingSourceUrl: '', // TODO: Replace with fundingSourceUrl
+      shareableId: encryptId(accountData.account_id),
+    });
 
     // Return a success message
     return parseStringify({
