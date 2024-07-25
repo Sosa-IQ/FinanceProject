@@ -82,7 +82,7 @@ export const exchangePublicToken = async ({
     // Create a bank account using the user ID, item ID, account ID, access token, funding source URL, and shareableId ID
 
     newBankAccount = await createBankAccount({
-      user_id: user.$id,
+      userId: user.$id,
       bankId: itemId,
       accountId: accountData.account_id,
       accessToken,
@@ -124,7 +124,7 @@ export async function createUser(firstName: string, lastName: string, email: str
       config.userCollectionId,
       ID.unique(),
       {
-        user_id: newUserAccount.$id,
+        userId: newUserAccount.$id,
         email: email,
         first_name: firstName,
         last_name: lastName,
@@ -171,14 +171,14 @@ export const getCurrentUser = async () => {
     const currentUser = await databases.listDocuments(
       config.databaseId,
       config.userCollectionId,
-      [Query.equal("user_id", currentAccount.$id)]
+      [Query.equal("userId", currentAccount.$id)]
     );
 
     if (!currentUser) throw Error;
 
     return currentUser.documents[0];
   } catch (error) {
-    console.log(error);
+    console.log("No active session:", error);
     return null;
   }
 }
@@ -197,7 +197,7 @@ export async function signOut() {
 
 // Create Bank Account
 export const createBankAccount = async ({
-  user_id,
+  userId,
   bankId,
   accountId,
   accessToken,
@@ -211,7 +211,7 @@ export const createBankAccount = async ({
       config.bankCollectionId,
       ID.unique(),
       {
-        user_id,
+        userId,
         bankId,
         accountId,
         accessToken,

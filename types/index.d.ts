@@ -15,7 +15,7 @@ declare interface exchangePublicTokenProps {
 
 declare interface createBankAccountProps {
   accessToken: string;
-  user_id: string;
+  userId: string;
   accountId: string;
   bankId: string;
   fundingSourceUrl: string;
