@@ -226,33 +226,32 @@ export const createBankAccount = async ({
   }
 }
 
-// export const getBanks = async ({ userId }: getBanksProps) => {
-//   try {
+export const getBanks = async ({ userId }: getBanksProps) => {
+  try {
 
-//     const banks = await databases.listDocuments(
-//       DATABASE_ID!,
-//       BANK_COLLECTION_ID!,
-//       [Query.equal('userId', [userId])]
-//     )
+    const banks = await databases.listDocuments(
+      config.databaseId,
+      config.bankCollectionId,
+      [Query.equal('userId', [userId])]
+    )
 
-//     return parseStringify(banks.documents);
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
+    return parseStringify(banks.documents);
+  } catch (error) {
+    console.log(error)
+  }
+}
 
-// export const getBank = async ({ documentId }: getBankProps) => {
-//   try {
-//     const { database } = await createAdminClient();
+export const getBank = async ({ documentId }: getBankProps) => {
+  try {
 
-//     const bank = await database.listDocuments(
-//       DATABASE_ID!,
-//       BANK_COLLECTION_ID!,
-//       [Query.equal('$id', [documentId])]
-//     )
+    const bank = await databases.listDocuments(
+      config.databaseId,
+      config.bankCollectionId,
+      [Query.equal('userId', [documentId])]
+    )
 
-//     return parseStringify(bank.documents[0]);
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
+    return parseStringify(bank.documents[0]);
+  } catch (error) {
+    console.log(error)
+  }
+}
