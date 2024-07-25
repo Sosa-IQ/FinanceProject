@@ -1,7 +1,9 @@
-import { CountryCode, ProcessorTokenCreateRequest, ProcessorTokenCreateRequestProcessorEnum, Products } from "plaid";
+import { CountryCode, Products } from "plaid";
 import { plaidClient } from "@/lib/plaid";
 import { encryptId, parseStringify } from "../utils";
-import { createBankAccount } from "../appwrite";
+import { account, config, databases } from "../appwrite";
+import { ID, Query } from "react-native-appwrite";
+
 
 export const createLinkToken = async (user: User) => {
   try {
@@ -98,3 +100,159 @@ export const exchangePublicToken = async ({
     console.error("An error occurred while creating exchanging token:", error);
   }
 }
+
+// Register user (Sign Up)
+export async function createUser(firstName: string, lastName: string, email: string, password: string) {
+  let newUserAccount;
+
+  try {
+    newUserAccount = await account.create(
+      ID.unique(),
+      email,
+      password,
+      `${firstName} ${lastName}`
+    );
+
+    if (!newUserAccount) throw new Error('Error creating new user account');
+
+    // TODO: Implement Stripe, creating a stripe customer here and add to database
+
+    await signIn(email, password);
+
+    const newUser = await databases.createDocument(
+      config.databaseId,
+      config.userCollectionId,
+      ID.unique(),
+      {
+        user_id: newUserAccount.$id,
+        email: email,
+        first_name: firstName,
+        last_name: lastName,
+      }
+    );
+
+    return parseStringify(newUser);
+  } catch (error) {
+    console.log(error);
+    throw new Error(error as string);
+  }
+}
+
+// Sign In
+export async function signIn(email: string, password: string) {
+  try {
+    const session = await account.createEmailPasswordSession(email, password);
+
+    return session;
+  } catch (error) {
+    console.log(error);
+    throw new Error(error as string);
+  }
+}
+
+// Get Account
+export async function getAccount() {
+  try {
+    const currentAccount = await account.get();
+
+    return currentAccount;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+}
+
+// Get Current User
+export const getCurrentUser = async () => {
+  try {
+    const currentAccount = await getAccount();
+
+    if(!currentAccount) throw Error;
+
+    const currentUser = await databases.listDocuments(
+      config.databaseId,
+      config.userCollectionId,
+      [Query.equal("user_id", currentAccount.$id)]
+    );
+
+    if (!currentUser) throw Error;
+
+    return currentUser.documents[0];
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+// Sign Out
+export async function signOut() {
+  try {
+    const session = await account.deleteSession("current");
+
+    return session;
+  } catch (error) {
+    console.log(error);
+    throw new Error(error as string);
+  }
+}
+
+// Create Bank Account
+export const createBankAccount = async ({
+  user_id,
+  bankId,
+  accountId,
+  accessToken,
+  fundingSourceUrl,
+  shareableId,
+}: createBankAccountProps) => {
+  try {
+
+    const bankAccount = await databases.createDocument(
+      config.databaseId,
+      config.bankCollectionId,
+      ID.unique(),
+      {
+        user_id,
+        bankId,
+        accountId,
+        accessToken,
+        fundingSourceUrl,
+        shareableId,
+      }
+    )
+
+    return parseStringify(bankAccount);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// export const getBanks = async ({ userId }: getBanksProps) => {
+//   try {
+
+//     const banks = await databases.listDocuments(
+//       DATABASE_ID!,
+//       BANK_COLLECTION_ID!,
+//       [Query.equal('userId', [userId])]
+//     )
+
+//     return parseStringify(banks.documents);
+//   } catch (error) {
+//     console.log(error)
+//   }
+// }
+
+// export const getBank = async ({ documentId }: getBankProps) => {
+//   try {
+//     const { database } = await createAdminClient();
+
+//     const bank = await database.listDocuments(
+//       DATABASE_ID!,
+//       BANK_COLLECTION_ID!,
+//       [Query.equal('$id', [documentId])]
+//     )
+
+//     return parseStringify(bank.documents[0]);
+//   } catch (error) {
+//     console.log(error)
+//   }
+// }

@@ -6,7 +6,7 @@ import { images } from '@/constants'
 import FormField from '@/components/FormField'
 import AuthButton from '@/components/AuthButton'
 import { Link, router } from 'expo-router'
-import { getCurrentUser, signIn } from '@/lib/appwrite'
+import { getCurrentUser, signIn } from '@/lib/actions/user.actions'
 import { useGlobalContext } from '@/context/GlobalProvider'
 
 const LogIn = () => {
