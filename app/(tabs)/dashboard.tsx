@@ -4,6 +4,7 @@ import BaseBackground from '@/components/BaseBackground';
 import PlaidLink from '@/components/PlaidLink';
 import { useGlobalContext } from '@/context/GlobalProvider';
 import { getAccounts, getAccount } from '@/lib/actions/bank.actions';
+import { CountUp } from 'use-count-up';
 
 const DashboardScreen = () => {
   const { user } = useGlobalContext();
@@ -44,8 +45,19 @@ const DashboardScreen = () => {
   return (
     <BaseBackground>
     <View className='flex-1 items-center justify-center gap-4'>
-      <View className='bg-green-500 h-36 w-96 px-6 rounded justify-center'>
-        <Text className='text-center'>${accounts?.totalCurrentBalance}</Text>
+      <View className='bg-greenSecondary h-36 w-96 px-6 rounded justify-center'>
+        <Text className='bg-green-300 text-center'>
+          Total Account Balance:
+        </Text>
+        <Text className='text-center text-xl'>
+          $
+          <CountUp 
+            isCounting={true}
+            end={accounts?.totalCurrentBalance}
+            decimalPlaces={2}
+            easing={'easeOutCubic'}
+          />
+        </Text>
       </View>
       <View className=' bg-gray-400 h-56 w-96 px-6 items-center rounded'>
         <Text>Recent Transactions</Text>
