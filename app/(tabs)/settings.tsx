@@ -4,7 +4,7 @@ import {LinearGradient} from 'expo-linear-gradient';
 import BaseBackground from '@/components/BaseBackground';
 import { useGlobalContext } from '@/context/GlobalProvider';
 import { router } from 'expo-router';
-import { signOut } from '@/lib/appwrite';
+import { signOut } from '@/lib/actions/user.actions';
 
 const SettingsScreen = () => {
   const { user, setUser, setIsLogged } = useGlobalContext();

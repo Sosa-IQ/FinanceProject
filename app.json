@@ -29,7 +29,14 @@
       // "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "@stripe/stripe-react-native",
+        {
+          "merchantIdentifier": "merchant.com.budgit", // required for Apple Pay (ios only)
+          "enableGooglePay": true // for Google Pay (android only)
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

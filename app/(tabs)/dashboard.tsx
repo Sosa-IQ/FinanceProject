@@ -1,31 +1,15 @@
 import { View, Text, Button, Modal } from 'react-native'
-import React, { useState } from 'react'
-import { createLinkToken } from '@/lib/actions/user.actions';
+import React, { useEffect, useState } from 'react'
 import BaseBackground from '@/components/BaseBackground';
 import PlaidLink from '@/components/PlaidLink';
+import { useGlobalContext } from '@/context/GlobalProvider';
+import { getAccounts, getAccount } from '@/lib/actions/bank.actions';
+import { CountUp } from 'use-count-up';
 
 const DashboardScreen = () => {
-  const user: User = {
-    $id: "01234",
-    email: "johndoe@example.com",
-    userId: "12345",
-    dwollaCustomerUrl: "https://api-sandbox.dwolla.com/customers/12345",
-    dwollaCustomerId: "12345",
-    firstName: "John",
-    lastName: "Doe",
-    name: "John Doe",
-    address1: "123 Main St",
-    city: "New York",
-    state: "NY",
-    postalCode: "10001",
-    dateOfBirth: "1990-01-01",
-    ssn: "123-45-6789",
-  };
-
-  const handleCreateLinkToken = () => {
-    const linkToken = createLinkToken(user);
-    console.log(linkToken);
-  };
+  const { user } = useGlobalContext();
+  const[account, setAccount] = useState<{ data: any } | null>(null);
+  const[accounts, setAccounts] = useState(null);
 
   const [modalVisible, setModalVisible] = useState(false);
   
@@ -33,11 +17,47 @@ const DashboardScreen = () => {
     setModalVisible(!modalVisible);
   };
 
+  useEffect(() => {
+    const fetchAccountData = async () => {
+      try {
+        const accounts = await getAccounts({ userId: user.$id });
+
+        if (!accounts) {
+          console.error('Error fetching accounts');
+          return};
+
+        const accountsData = accounts?.data;
+        const appwriteItemId = (user.$id as string) || accountsData[0]?.appwriteItemId;
+
+        const accountData = await getAccount({ appwriteItemId });
+        setAccount(accountData);
+        setAccounts(accounts);
+      } catch (error) {
+        console.error('Error fetching account data:', error);
+      }
+    };
+
+    fetchAccountData();
+  }, [user, user.$id]);
+
+  console.log("Account", account);
+  console.log("Accounts", accounts);
   return (
     <BaseBackground>
     <View className='flex-1 items-center justify-center gap-4'>
-      <View className='bg-green-500 h-36 w-96 px-6 rounded justify-center'>
-        <Text className='text-center'>$(Balance)</Text>
+      <View className='bg-greenSecondary h-36 w-96 px-6 rounded justify-center'>
+        <Text className='bg-green-300 text-center'>
+          Total Account Balance:
+        </Text>
+        <Text className='text-center text-xl'>
+          $
+          <CountUp 
+            isCounting={true}
+            end={accounts?.totalCurrentBalance}
+            decimalPlaces={2}
+            easing={'easeOutCubic'}
+          />
+        </Text>
       </View>
       <View className=' bg-gray-400 h-56 w-96 px-6 items-center rounded'>
         <Text>Recent Transactions</Text>
@@ -54,13 +74,16 @@ const DashboardScreen = () => {
       >
         <View className='flex-1 mt-24'>
           <PlaidLink
-          // linkToken={String(linkToken)}
+          user={user}
           onEvent={(event) => console.log(event)}
           onExit={(exit) => {
             console.log(exit);
             toggleModal();
           }}
-          onSuccess={(success) => console.log(success)}
+          onSuccess={(success) => {
+            console.log(success);
+            toggleModal();
+          }}
           />
         </View>
       </Modal>
